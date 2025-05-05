@@ -1,6 +1,8 @@
 import React, {useState,useEffect} from 'react'
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 
 const List = () => {
@@ -9,6 +11,17 @@ const List = () => {
     const response = await axios.get("http://localhost:3000/api/registration")
     setData(response.data.registrations)
   }
+  const handleUpdate = () =>{
+
+  }
+  const handleDelete = async (id) => {
+    const response = await axios.delete(`http://localhost:3000/api/registration/${id}`)
+    if(response.data.success){
+      toast.success(response.data.message)
+      fetchData()
+    } 
+    }
+  
   useEffect(() => {
     fetchData();
   },[])
@@ -50,7 +63,7 @@ const List = () => {
       name: 'Actions',
       cell: row => (
         <div className='d-flex justify-content-center'>
-          <button
+          <Link
             className='btn btn-primary btn-sm me-2'
             style={{
               backgroundColor: '#007bff',
@@ -59,10 +72,10 @@ const List = () => {
               padding: '5px 10px',
               borderRadius: '4px',
             }}
-            onClick={() => handleEdit(row)}
-          >
-            Edit
-          </button>
+            to={`/registration/${row._id}`}
+            >
+            U
+          </Link>
           <button
             className='btn btn-danger btn-sm'
             style={{
@@ -74,7 +87,7 @@ const List = () => {
             }}
             onClick={() => handleDelete(row._id)}
           >
-            Delete
+            D
           </button>
         </div>
       ),
